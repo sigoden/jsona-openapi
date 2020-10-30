@@ -1,14 +1,14 @@
-# JSON-OPENAPI-JS
+# JSONA-OPENAPI-JS
 
 A parser to convert jsona format openapi file to cononcial json openapi file. 
 
 ```
-npm i json-openapi-js
+npm i jsona-openapi-js
 ```
 
 
 ```js
-const { parse } = require("json-openapi-js");
+const { parse } = require("jsona-openapi-js");
 
 const text = `
 { @openapi
