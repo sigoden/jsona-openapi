@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/codemirror.min.css" integrity="sha512-xIf9AdJauwKIVtrVRZ0i4nHP61Ogx9fSRAkCLecmE2dL/U8ioWpDvFCAy4dcfecN72HHB9+7FfQj3aiO68aaaw==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/addon/lint/lint.min.css" integrity="sha512-6Owk90V+dmnBh35Q/OWxqfmLXExGMWDwb7tijRebrz7lLkDxZ7RS+eiNQmpUPrlWtpQulb/BkatkyPwPkMhpUQ==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.36.0/swagger-ui.min.css" integrity="sha512-c9Fmh2rJWb5kaFhvVlPcBLrFdzrVXkdTofQAozw6MfOsC3DwN6pHrpqk9gm8qwJh9wURiK1Hv57/GxmzJzew8g==" crossorigin="anonymous" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/codemirror.min.js" integrity="sha512-UxcTlYsLkcuGZL9JNnMsfo3p7VFSmcgBjH1VUSM82Okk5ni52bk7vz9f2p+D1VnMcNUmMzbzgWqWcdJ2j8Svow==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.36.0/swagger-ui-bundle.min.js" integrity="sha512-LgwYUszrWGrbCdOfXtw56WUAxcPFFWt/3GaPujhyrS6uhTua+F+GW2tL7Y6AF0ZB35SaC94JMtVQjVJsPFn9FQ==" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/3.14.0/js-yaml.min.js" integrity="sha512-ia9gcZkLHA+lkNST5XlseHz/No5++YBneMsDp1IZRJSbi1YqQvBeskJuG1kR+PH1w7E0bFgEZegcj0EwpXQnww==" crossorigin="anonymous"></script>
+    <title>JSONA-OPENAPI</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+        .CodeMirror {
+            height: auto;
+        }
+
+        #container {
+            display: flex;
+        }
+        #genBtn {
+            cursor: pointer;
+            position: absolute;
+            right: 0;
+            z-index: 9;
+            color: white;
+            background: #4CAF50;
+            border: none;
+            padding: 16px;
+            transition: 0.3s;
+            font-size: 17px;
+            outline: none;
+        }
+        #genBtn:hover {
+            border: none;
+            filter: brightness(90%);
+        }
+        #leftPannel {
+            width: 50%;
+            position: relative;
+            border-right: 2px solid #f3f3f3;
+        }
+        #rightPannel {
+            width: 50%;
+        }
+        #rightPannelHeader {
+            width: 100%;
+            border: 1px solid #f3f3f3;
+        }
+        #tabBar {
+            display: flex;
+            overflow: hidden;
+        }
+        #tabBar button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 17px;
+            border: 1px solid #f3f3f3;
+        }
+        #tabBar button:hover {
+            background-color: #ddd;
+        }
+        #tabBar button.active {
+            background-color: #ccc;
+        }
+
+        .tooltip {
+            display:inline-block;
+            position:relative;
+            text-align:left;
+        }
+
+        .tooltip .right {
+            top: 50%;
+            white-space: nowrap;
+            margin-left: 20px;
+            transform: translate(0, -50%);
+            padding: 0 5px;
+            color: #444444;
+            background-color: #EEEEEE;
+            font-weight: normal;
+            font-size: 13px;
+            border-radius: 2px;
+            position: absolute;
+            z-index: 99999999;
+            box-sizing: border-box;
+            line-height: 1px;
+            box-shadow: 0 1px 8px rgba(0,0,0,0.5);
+            display: none;
+        }
+
+        .tooltip:hover .right {
+            display:block;
+        }
+
+        .tooltip .right i {
+            position:absolute;
+            top:50%;
+            right:100%;
+            margin-top:-12px;
+            width:12px;
+            height:24px;
+            overflow:hidden;
+        }
+
+        .tooltip .right i::after {
+            content:'';
+            position:absolute;
+            width:12px;
+            height:12px;
+            left:0;
+            top:50%;
+            transform:translate(50%,-50%) rotate(-45deg);
+            background-color:#EEEEEE;
+            box-shadow:0 1px 8px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="leftPannel">
+            <button title="Generate/Regenerate swagger ui and openapi doc" id="genBtn">
+                Generate
+            </button>
+        </div>
+        <div id="rightPannel">
+            <div id="rightPannelHeader">
+                <div id="tabBar">
+                    <button id="tabBtnUi" class="active">Swagger UI</button>
+                    <button id="tabBtnDoc">OpenApi JSON</button>
+                    <button id="tabBtnDocYaml">OpenApi YAML</button>
+                </div>
+            </div>
+            <div class="tabPannel" id="ui"></div>
+            <div class="tabPannel" id="doc"></div>
+            <div class="tabPannel" id="docYaml"></div>
+        </div>
+    </div>
+<script type="module">
+    import jsona_openapi, { parse } from "/jsona_openapi_js.js";
+    jsona_openapi();
+    const uiTabBtn = document.getElementById("tabBtnUi");
+    const docTabBtn = document.getElementById("tabBtnDoc");
+    const docYamlTabBtn = document.getElementById("tabBtnDocYaml");
+    const genBtn = document.getElementById("genBtn"); 
+    const uiNode =document.getElementById("ui");
+    const docNode =document.getElementById("doc");
+    const docYamlNode =document.getElementById("docYaml");
+    const sourceEditor = CodeMirror(document.getElementById("leftPannel"), {
+        value: "", 
+        height: "100%",
+        gutters: ["CodeMirror-linenumbers", "gutter-error"],
+        mode:  "javascript",
+        lineNumbers: true,
+    });
+    const docEditor = CodeMirror(docNode, {
+        value: "",
+        height: "100%",
+        mode:  "json",
+        readOnly: true,
+    });
+    docEditor.getWrapperElement().style.display = "none";
+    const docYamlEditor = CodeMirror(docYamlNode, {
+        value: "",
+        height: "100%",
+        mode:  "yaml",
+        readOnly: true,
+    });
+    docYamlEditor.getWrapperElement().style.display = "none";
+    document.addEventListener("DOMContentLoaded", () => {
+        uiTabBtn.addEventListener("click", showUi);
+        docTabBtn.addEventListener("click", showDoc);
+        docYamlTabBtn.addEventListener("click", showDocYaml);
+        genBtn.addEventListener("click", generate);
+        const { source } = parseQuery(window.location.search);
+        if (source) loadSource(source);
+    });
+    function showUi() {
+        uiTabBtn.classList.add("active");
+        docTabBtn.classList.remove("active");
+        docYamlTabBtn.classList.remove("active");
+        uiNode.style.display = ""
+        docEditor.getWrapperElement().style.display = "none";
+        docYamlEditor.getWrapperElement().style.display = "none";
+    }
+    function showDoc() {
+        uiTabBtn.classList.remove("active");
+        docTabBtn.classList.add("active");
+        docYamlTabBtn.classList.remove("active");
+        uiNode.style.display = "none";
+        docEditor.getWrapperElement().style.display = "";
+        docEditor.setSize(null, "auto");
+        docYamlEditor.getWrapperElement().style.display = "none";
+    }
+    function showDocYaml() {
+        uiTabBtn.classList.remove("active");
+        docTabBtn.classList.remove("active");
+        docYamlTabBtn.classList.add("active");
+        uiNode.style.display = "none";
+        docEditor.getWrapperElement().style.display = "none";
+        docYamlEditor.getWrapperElement().style.display = "";
+        docYamlEditor.setSize(null, "auto");
+    }
+    function parseQuery(queryString) {
+        const query = {};
+        const pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
+        for (var i = 0; i < pairs.length; i++) {
+            const pair = pairs[i].split('=');
+            query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+        }
+        return query;
+    }
+
+    async function loadSource(url) {
+        try {
+            const res = await fetch(url, { cache: "no-cache"});
+            if (res.status >= 400) {
+                toast("error", `fail to fetch jsona, ${await res.text()}`);
+                return;
+            }
+            const source = await res.text();
+            sourceEditor.setValue(source);
+            setTimeout(generate, 500);
+        } catch (err) {
+        }
+    }
+
+    function generate() {
+        sourceEditor.clearGutter("gutter-error");
+        const source = sourceEditor.getValue().trim();
+        if (!source) {
+            toast("error", "no jsona");
+            return;
+        }
+        try {
+            window.spec = parse(source);
+        } catch (err) {
+            console.log(err);
+            const message = err.info ? `${err.info} at line ${err.position.line} col ${err.position.col}` : err.message;
+
+            sourceEditor.setGutterMarker((err.position.line || 1) - 1, "gutter-error", makeErrorMarker(err.info || err.message));
+            toast("error", message);
+            return;
+        }
+        updateSwaggerUi();
+        docEditor.setValue(JSON.stringify(spec, null, 2));
+        docYamlEditor.setValue(jsyaml.dump(spec));
+    }
+
+    function makeErrorMarker(message) {
+        const marker = document.createElement("div");
+        marker.style.color = "red";
+        marker.style.width = "1rem";
+        marker.innerHTML = `<div class="tooltip">🅧
+    <div class="right">
+        <p>${message}</p>
+    </div>
+        `;
+        return marker;
+    }
+
+    function toast(kind, message) {
+        let color;
+        if (kind === "success") {
+            color = "green"
+        } else if (kind === "error") {
+            color = "red"
+        } else if (kind === "warning") {
+            color = "yellow"
+        }
+        Toastify({
+            text: message,
+            duration: 3000, 
+            backgroundColor: color,
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+        }).showToast();
+    }
+    function updateSwaggerUi() {
+        let { spec, swagger } = window;
+        if (!spec) return;
+        if (!swagger) {
+            window.swagger = SwaggerUIBundle({
+                dom_id: "#ui",
+                spec,
+                presets: [ SwaggerUIBundle.presets.apis],
+            })
+        } else {
+            swagger.specActions.updateJsonSpec(spec);
+        }
+    }
+</script>
+</body>
+</html>
