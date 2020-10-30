@@ -3,6 +3,9 @@ name = "jsona-openapi-js"
 version = "0.1.0"
 authors = ["sigoden <sigoden@gmail.com>"]
 edition = "2018"
+description = "Parse openapi in jsona format"
+repository = "https://github.com/sigoden/jsona-openapi"
+keywords = ["jsona", "openapi", "swagger"]
 
 [lib]
 crate-type = ["cdylib", "rlib"]

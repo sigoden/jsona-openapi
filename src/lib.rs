@@ -8,15 +8,10 @@ use wasm_bindgen::prelude::*;
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
-
 #[wasm_bindgen]
 pub fn parse(data: String) -> Result<JsValue, JsValue> {
     match jsona_openapi::parse(data.as_str()) {
-        Ok(ast) => {
-            Ok(JsValue::from_serde(&ast).unwrap())
-        }
-        Err(err) => {
-            Err(JsValue::from_serde(&err).unwrap())
-        }
+        Ok(ast) => Ok(JsValue::from_serde(&ast).unwrap()),
+        Err(err) => Err(JsValue::from_serde(&err).unwrap()),
     }
 }
