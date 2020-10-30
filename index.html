@@ -249,7 +249,7 @@
             console.log(err);
             const message = err.info ? `${err.info} at line ${err.position.line} col ${err.position.col}` : err.message;
 
-            sourceEditor.setGutterMarker((err.position.line || 1) - 1, "gutter-error", makeErrorMarker(err.info || err.message));
+            sourceEditor.setGutterMarker((err.position.line || 1) - 1, "gutter-error", makeErrorMarker(message));
             toast("error", message);
             return;
         }
