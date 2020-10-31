@@ -12,6 +12,7 @@ const sourceEditor = ace.edit("source", {
     maxLines: Number.POSITIVE_INFINITY,
     mode: "ace/mode/json5",
 });
+sourceEditor.commands.removeCommand("find");
 const docNode = document.getElementById("doc");
 const docEditor = ace.edit("doc", {
     maxLines: Number.POSITIVE_INFINITY,
@@ -19,11 +20,13 @@ const docEditor = ace.edit("doc", {
     mode: "ace/mode/json",
 });
 docNode.style.display = "none";
+docEditor.commands.removeCommand("find");
 const docYamlNode = document.getElementById("docYaml");
 const docYamlEditor = ace.edit("docYaml", {
     maxLines: Number.POSITIVE_INFINITY,
     mode: "ace/mode/yaml",
 });
+docYamlEditor.commands.removeCommand("find");
 docYamlNode.style.display = "none";
 document.addEventListener("DOMContentLoaded", () => {
     uiTabBtn.addEventListener("click", showUi);
