@@ -76,8 +76,11 @@ async function loadSource(url) {
         }
         const source = await res.text();
         sourceEditor.setValue(source);
+        sourceEditor.selection.clearSelection();
         setTimeout(generate, 500);
     } catch (err) {
+        toast("error", err);
+        return;
     }
 }
 
@@ -94,9 +97,10 @@ function generate() {
         const position = err.position || { line: 1, col: 1 };
         const message = err.info ? `${err.info} at line ${position.line} col ${position.col}` : err.message;
 
+        const [row, column] = [position.line - 1, position.col - 1];
         sourceEditor.getSession().setAnnotations([{
-          row: position.line - 1,
-          column: position.column - 1,
+          row,
+          column,
           text: message,
           type: "error"
         }]);
