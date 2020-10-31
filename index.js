@@ -7,13 +7,15 @@ const genBtn = document.getElementById("genBtn");
 const uiNode =document.getElementById("ui");
 const sourceEditor = ace.edit("source", {
     autoScrollEditorIntoView: true,
-    minLines: 5,
+    useWorker: false,
+    minLines: 10,
     maxLines: Number.POSITIVE_INFINITY,
     mode: "ace/mode/json5",
 });
 const docNode = document.getElementById("doc");
 const docEditor = ace.edit("doc", {
     maxLines: Number.POSITIVE_INFINITY,
+    useWorker: false,
     mode: "ace/mode/json",
 });
 docNode.style.display = "none";

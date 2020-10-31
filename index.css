@@ -6,8 +6,6 @@ html, body {
 #container {
     display: flex;
 }
-#source {
-}
 #genBtn {
     cursor: pointer;
     position: absolute;
@@ -49,6 +47,7 @@ html, body {
     cursor: pointer;
     padding: 14px 16px;
     transition: 0.3s;
+    white-space: nowrap;
     font-size: 17px;
     border: 1px solid #f3f3f3;
 }
