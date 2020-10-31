@@ -36,6 +36,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const { source } = parseQuery(window.location.search);
     if (source) loadSource(source);
 });
+document.addEventListener("paste", e => {
+  const text = e.clipboardData.getData('text');
+  if (/@openapi/.test(text)) {
+      sourceEditor.gotoLine(0, 0, true);
+      generate()
+  }
+});
 function showUi() {
     uiTabBtn.classList.add("active");
     docTabBtn.classList.remove("active");
@@ -111,8 +118,8 @@ function generate() {
         return;
     }
     updateSwaggerUi();
-    docEditor.setValue(JSON.stringify(spec, null, 2));
-    docYamlEditor.setValue(jsyaml.dump(spec));
+    docEditor.setValue(JSON.stringify(spec, null, 2), -1);
+    docYamlEditor.setValue(jsyaml.dump(spec), -1);
 }
 
 function toast(kind, message) {
