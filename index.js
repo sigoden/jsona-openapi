@@ -1,5 +1,8 @@
-import jsona_openapi, { parse } from "./jsona_openapi_js.js";
-jsona_openapi();
+import jsona_openapi, { parseOpenApi } from "./jsona_openapi_js.js";
+let ready = false;
+jsona_openapi().then(() => {
+    ready = true;
+});
 const uiTabBtn = document.getElementById("tabBtnUi");
 const docTabBtn = document.getElementById("tabBtnDoc");
 const docYamlTabBtn = document.getElementById("tabBtnDocYaml");
@@ -95,6 +98,10 @@ async function loadSource(url) {
 }
 
 function generate() {
+    if (!ready) {
+      setTimeout(generate, 500);
+      return;
+    }
     sourceEditor.getSession().clearAnnotations();
     const source = sourceEditor.getValue().trim();
     if (!source) {
@@ -102,7 +109,7 @@ function generate() {
         return;
     }
     try {
-        window.spec = parse(source);
+        window.spec = parseOpenApi(source);
     } catch (err) {
         const position = err.position || { line: 1, col: 1 };
         const message = err.info ? `${err.info} at line ${position.line} col ${position.col}` : err.message;
