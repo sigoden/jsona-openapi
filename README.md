@@ -8,7 +8,7 @@ npm i jsona-openapi-js
 
 
 ```js
-const { parse } = require("jsona-openapi-js");
+const { parseOpenApi } = require("jsona-openapi-js");
 
 const text = `
 { @openapi
@@ -31,5 +31,5 @@ const text = `
 }
 `;
 
-parse(text); // openapi spec object
+parseOpenApi(text); // openapi spec object
 ```
