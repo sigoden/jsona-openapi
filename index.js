@@ -1,4 +1,4 @@
-import jsona_openapi, { parseOpenApi } from "./jsona_openapi_js.js";
+import jsona_openapi, { parse } from "./jsona_openapi_js.js";
 let ready = false;
 jsona_openapi().then(() => {
     ready = true;
@@ -109,7 +109,7 @@ function generate() {
         return;
     }
     try {
-        window.spec = parseOpenApi(source);
+        window.spec = parse(source);
     } catch (err) {
         const position = err.position || { line: 1, col: 1 };
         const message = err.info ? `${err.info} at line ${position.line} col ${position.col}` : err.message;

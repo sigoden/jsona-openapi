@@ -104,10 +104,10 @@ function passStringToWasm0(arg, malloc, realloc) {
 * @param {string} data
 * @returns {any}
 */
-export function parseOpenApi(data) {
+export function parse(data) {
     var ptr0 = passStringToWasm0(data, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     var len0 = WASM_VECTOR_LEN;
-    var ret = wasm.parseOpenApi(ptr0, len0);
+    var ret = wasm.parse(ptr0, len0);
     return takeObject(ret);
 }
 
