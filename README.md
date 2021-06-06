@@ -31,5 +31,5 @@ const text = `
 }
 `;
 
-parseOpenApi(text); // openapi spec object
+const spec = parseOpenApi(text); // openapi spec object
 ```

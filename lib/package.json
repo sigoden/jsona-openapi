@@ -1,0 +1,21 @@
+{
+  "name": "jsona-openapi-js",
+  "collaborators": [
+    "sigoden <sigoden@gmail.com>"
+  ],
+  "description": "Parse openapi in jsona format",
+  "version": "__VERSION__",
+  "homepage": "https://github.com/sigoden/jsona-openapi/tree/wasm-bindgen",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sigoden/jsona-openapi"
+  },
+  "files": [
+    "jsona_openapi_js_bg.wasm",
+    "jsona_openapi_js.js",
+    "jsona_openapi_js_bg.js",
+    "jsona_openapi_js.d.ts"
+  ],
+  "main": "jsona_openapi_js.js",
+  "types": "jsona_openapi_js.d.ts"
+}
